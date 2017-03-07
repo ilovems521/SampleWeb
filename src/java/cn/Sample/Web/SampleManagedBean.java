@@ -1,26 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cn.Sample.Web;
 
 import java.sql.SQLException;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.inject.Named;
 
-
-/**
- *
- * @author ShinRu
- */
 @Named(value = "sampleManagedBean")
 @RequestScoped
 @ManagedBean
 public class SampleManagedBean {
-    
+
     private String name;
     private int age;
 
@@ -31,7 +22,7 @@ public class SampleManagedBean {
     public int getAge() {
         return age;
     }
-     
+
     public SampleManagedBean() {
     }
 
@@ -42,18 +33,23 @@ public class SampleManagedBean {
     public String getName() {
         return name;
     }
-    
-    @PostConstruct		
-    public void init(){		
+
+    @PostConstruct
+    public void init() {
     }
-    
-    public String send(){
+
+    public String send() {
         JDBCSampleBean jdbcsb = new JDBCSampleBean();
-        try{
-        this.name = jdbcsb.getNameList(Long.parseLong(name)).get(0).getName();
-        }catch(SQLException e){
+        try {
+            List<SampleModel> list = jdbcsb.getNameList(Long.parseLong(name));
+            if (list != null) {
+                this.name = "result is null";
+                return "";
+            }
+            this.name = list.get(0).getName();
+        } catch (SQLException e) {
             this.name = e.getMessage();
         }
         return "";
-    }		
+    }
 }

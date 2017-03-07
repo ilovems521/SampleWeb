@@ -17,7 +17,6 @@ import java.util.List;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.ServletException;
 import javax.sql.DataSource;
 
 /**
@@ -27,56 +26,50 @@ import javax.sql.DataSource;
 @Named(value = "jDBCSampleBean")
 @SessionScoped
 public class JDBCSampleBean implements Serializable {
-  private DataSource dataSource;
-  
-    /**
-     * Creates a new instance of JDBCSampleBean
-     */
-    public JDBCSampleBean(){
-        try{
-      Context context=new InitialContext();
-      dataSource=(DataSource)context.lookup("java:app/jdbc/myDatasource");
-    }catch(NamingException e){
+
+    private DataSource dataSource;
+
+    public JDBCSampleBean() {
+        try {
+            Context context = new InitialContext();
+            dataSource = (DataSource) context.lookup("java:app/jdbc/myDatasource");
+        } catch (NamingException e) {
+        }
     }
-  
-    }
-    
+
     //@Resource(name = "jdbc/MySQLDataSource")
-  
-    
-    public List<SampleModel> getNameList(Long userid) throws SQLException{
-        if(dataSource == null){
+    public List<SampleModel> getNameList(Long userid) throws SQLException {
+        if (dataSource == null) {
             throw new SQLException("Can't get data source");
         }
-        
+
         Connection conn = dataSource.getConnection();
-        
-        if(conn == null){
+
+        if (conn == null) {
             throw new SQLException("Can't get database connection");
         }
-        
+
         String sql = "select user_id , user_name from sample_web_db where user_id = ?";
-        
+
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setLong(1, userid);
-        
-       
-        
-        ResultSet result =  ps.executeQuery();
-        
+
+        ResultSet result = ps.executeQuery();
+
         List<SampleModel> list = new ArrayList<SampleModel>();
-        if (result==null){
+
+        if (result == null) {
             return null;
         }
-        while(result.next()){
-        SampleModel sampleModel = new SampleModel();
-        
-        sampleModel.setUserid(result.getLong("user_id"));
-        sampleModel.setName(result.getString("user_name"));
-        list.add(sampleModel);
+
+        while (result.next()) {
+            SampleModel sampleModel = new SampleModel();
+            sampleModel.setUserid(result.getLong("user_id"));
+            sampleModel.setName(result.getString("user_name"));
+            list.add(sampleModel);
         }
-        
+
         return list;
     }
-              
+
 }
