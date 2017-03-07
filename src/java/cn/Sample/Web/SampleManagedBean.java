@@ -5,6 +5,7 @@
  */
 package cn.Sample.Web;
 
+import java.sql.SQLException;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -47,7 +48,12 @@ public class SampleManagedBean {
     }
     
     public String send(){
-        this.name = "";
+        JDBCSampleBean jdbcsb = new JDBCSampleBean();
+        try{
+        this.name = jdbcsb.getNameList(Long.parseLong(name)).get(0).getName();
+        }catch(SQLException e){
+            this.name = e.getMessage();
+        }
         return "";
     }		
 }
