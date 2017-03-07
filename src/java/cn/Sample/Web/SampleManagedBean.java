@@ -19,8 +19,17 @@ import javax.inject.Named;
 @RequestScoped
 @ManagedBean
 public class SampleManagedBean {
-
+    
     private String name;
+    private int age;
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public int getAge() {
+        return age;
+    }
      
     public SampleManagedBean() {
     }
@@ -37,7 +46,8 @@ public class SampleManagedBean {
     public void init(){		
     }
     
-    public String send(){			
-        return "confrm.xhtml";		
+    public String send(){
+        this.name = "";
+        return "";
     }		
 }
